@@ -5,6 +5,7 @@ y la segunda usando terraform.
 # Ecplicación de la topoligia 
 Como vemos en la imagen esta todo dentro del porveedor de cloud de AWS y usamos la region de "us-east-1" tambien logranos observar el VPC y dentro del mismo
 las 3 subredes privadas y las 2 instancias EC2 por cada una de las redes.
-![TOPOLOGIA](/assets/Topologia2.png)
+![TOPOLOGIA](excercicis/pt1-3-ex2/assets/Topologia2.png)
+
 
 
