@@ -38,30 +38,6 @@ resource "aws_subnet" "subnet_network_c" {
   }
 }
 
-# AQUI CREO LOS GRUPOS DE SEGURIDAD 
-resource "aws_security_group" "sg_network_access" {
-  name        = "sg_network_access"
-  description = "Allow SSH access"
-  vpc_id      = aws_vpc.vpc_network_main.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "SG-Network-Access"
-  }
-}
 
 # Y AQUI CREO LAS MAQUINAS EC2 
 resource "aws_instance" "ec2_network_a_1" {
@@ -128,4 +104,5 @@ resource "aws_instance" "ec2_network_c_2" {
   tags = {
     Name = "EC2-Network-C-2"
   }
+
 }
