@@ -67,7 +67,7 @@ resource "aws_route_table_association" "tabla_rutas_2" {
 # Security Group para las instancias públicas
 resource "aws_security_group" "public_sg" {
   name        = "VPC-03-Public-SG"
-  description = "Permite SSH desde cualquier lugar, ICMP dentro del VPC, y todo el tráfico saliente"
+  description = "Permite SSH desde cualquier lugar, ICMP dentro del VPC, y todo el trafico saliente"
   vpc_id      = aws_vpc.VPC-03.id
 
   # Permite SSH desde cualquier lugar
@@ -90,13 +90,12 @@ resource "aws_security_group" "public_sg" {
 
   # Todo el tráfico saliente
   egress {
-    description      = "Todo el tráfico saliente"
+    description      = "Todo el trafico saliente"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
   }
-
   tags = {
     Name = "Grupo_Seguridad_VPC-03"
   }
