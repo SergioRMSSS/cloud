@@ -85,7 +85,7 @@ resource "aws_security_group" "public_sg" {
     from_port        = -1
     to_port          = -1
     protocol         = "icmp"
-    cidr_blocks      = [aws_vpc.VPC-03.cidr_block]
+    cidr_blocks      = ["10.0.0.0/16"]
   }
 
   # Todo el tráfico saliente
