@@ -56,11 +56,11 @@ resource "aws_route_table" "tabla_rutas" {
 
 # Asociacion de tabla de rutas a las subredes
 resource "aws_route_table_association" "tabla_rutas_1" {
-  subnet_id      = aws_subnet.public_subnet_1.id
+  subnet_id      = aws_subnet.subred_1a.id
   route_table_id = aws_route_table.tabla_rutas.id
 }
 resource "aws_route_table_association" "tabla_rutas_2" {
-  subnet_id      = aws_subnet.public_subnet_2.id
+  subnet_id      = aws_subnet.subred_1b.id
   route_table_id = aws_route_table.tabla_rutas.id
 }
 
