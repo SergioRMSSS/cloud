@@ -107,7 +107,7 @@ resource "aws_instance" "ec2_a" {
   instance_type = "t3.micro"
   subnet_id     = aws_subnet.subred-1a.id
   key_name      = "vockey"
-  security_groups = [aws_security_group.public_sg.name]
+  security_groups = [aws_security_group.public_sg.id]
   tags = {
     Name = "ec2-a"
   }
@@ -119,7 +119,7 @@ resource "aws_instance" "ec2_b" {
   instance_type = "t3.micro"
   subnet_id     = aws_subnet.subred-1b.id
   key_name      = "vockey"
-  security_groups = [aws_security_group.public_sg.name]
+  security_groups = [aws_security_group.public_sg.id]
   tags = {
     Name = "ec2-b"
   }
