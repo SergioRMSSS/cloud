@@ -81,11 +81,11 @@ cidr_blocks = ["0.0.0.0/0"]
 
 # Aqui creo las instancias publicas 
 resource "aws_instance" "instance_public" {
-  count         = var.instance_count
-  ami           = var.instance_ami
+  count = var.instance_count
+  ami = var.instance_ami
   instance_type = var.instance_type
-  subnet_id     = aws_subnet.public[count.index].id
-  key_name      = "vockey"
+  subnet_id = aws_subnet.public[count.index].id
+  key_name = "vockey"
   security_groups = [aws_security_group.sg.id]
   tags = {
     Name = "${var.project_name}-instance-pub-${count.index}"
@@ -94,11 +94,11 @@ resource "aws_instance" "instance_public" {
 
 # Aqui creo las instancias privadas
 resource "aws_instance" "instance_private" {
-  count         = var.instance_count
-  ami           = var.instance_ami
+  count = var.instance_count
+  ami = var.instance_ami
   instance_type = var.instance_type
-  subnet_id     = aws_subnet.private[count.index].id
-  key_name      = "vockey"
+  subnet_id = aws_subnet.private[count.index].id
+  key_name = "vockey"
   security_groups = [aws_security_group.sg.id]
   tags = {
     Name = "${var.project_name}-instance-priv-${count.index}"
