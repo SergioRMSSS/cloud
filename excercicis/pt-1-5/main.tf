@@ -1,7 +1,7 @@
 ### HECHO POR SERGIO RAÚL MORALES SOLÍS ###
 #Aqui creo el VPC con las variables del otro fichero
 resource "aws_vpc" "main" {
-  cidr_block = vpc_cdir
+  cidr_block = var.vpc_cdir
   tags = {
     Name = "${var.project_name}-vpc"
   }
