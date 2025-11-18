@@ -7,7 +7,7 @@ output "ID_ins_pub" {
 }
 
 output "ID_ins_priv" {
-  value = [for instancias in aws_aws_instance.instance_private : instancias.id]
+  value = [for instancias in aws_instance.instance_private : instancias.id]
     description = "Esto lo que hace es mostrar el ID de las maquinas privadas"
 }
 
@@ -27,5 +27,5 @@ output "IPs_ins_priv" {
 }
 
 output "bucket_name" {
-value = var.create_s3_bucket ? aws_s3_bucket.optional[0].bucket : null
+value = aws_s3_bucket.optional[0].bucket
 }
