@@ -27,5 +27,5 @@ output "IPs_ins_priv" {
 }
 
 output "bucket_name" {
-  value = var.create_s3_bucket ? aws_s3_bucket.optional[0].bucket : null
+  value = var.create_s3_bucket ? aws_s3_bucket.bucket[0].bucket : null
 }
