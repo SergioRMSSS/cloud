@@ -27,6 +27,5 @@ output "IPs_ins_priv" {
 }
 
 output "bucket_name" {
-  value = aws_s3_bucket.optional[0].bucket
-  description = "Nombre del bucket S3 (si se a creado)"
+  value = var.create_s3_bucket ? aws_s3_bucket.optional[0].bucket : null
 }
