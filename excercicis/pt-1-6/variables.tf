@@ -15,3 +15,16 @@ variable "allowed_ip" {
   type = string
   default = "0.0.0.0/0"
 }
+
+variable "instance_type" {
+  description = "La instancia que usaremos ya que asi es mas simple de cambiar y de pones despues en el main"
+  type = string
+  default = "t3.micro"
+}
+
+variable "ami" {
+  description = "Usamos una variable para la AMI porque es mas sencillo"
+  type = string
+  default = "ami-068c0051b15cdb816"
+}
+
