@@ -164,13 +164,13 @@ resource "aws_key_pair" "private_kp" {
 }
 
 # Aqui creo los ficheros .pem
-resource "local_file" "bastion.pem" {
+resource "local_file" "bastion-pem" {
   filename = "${path.module}/bastion.pem"
   content = tls_private_key.bastion_key.private_key_pem
   file_permission = "0400"
 }
 
-resource "local_file" "private.pem" {
+resource "local_file" "private-pem" {
   count = var.private_instance_count
   filename = "${path.module}/private-${count.index + 1}.pem"
   content = tls_private_key.private_key[count.index].private_key_pem
