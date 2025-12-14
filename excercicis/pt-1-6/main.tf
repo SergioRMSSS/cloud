@@ -9,7 +9,7 @@ resource "aws_vpc" "main" {
 
 # Aqui creo el internet gateway 
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.vpc-main.id
+  vpc_id = aws_vpc.main.id
   tags = {
     Name = "igw"
   }

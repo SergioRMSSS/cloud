@@ -4,5 +4,5 @@ output "bastion_public_ip" {
 }
 
 output "private_instances_ips" {
-  value = aws_instance.private_servers[*].private_ip
+  value = aws_instance.private[*].private_ip
 }
