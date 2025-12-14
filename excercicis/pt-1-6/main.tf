@@ -205,9 +205,12 @@ resource "aws_s3_object" "private_pub" {
 
 # COnfiguracion del SSHCONFIG
 resource "local_file" "ssh_config" {
-  filename = "ssh_config_per_connectar.txt"
   content = templatefile("${path.module}/ssh_config.tpl", {
-    bastion_ip = aws_eip.bastion_eip.public_ip
-    private_ips = aws_instance.private.*.private_ip
+    bastion_ip   = aws_eip.bastion_eip.public_ip
+    bastion_user = "ec2-user"
+    bastion_key  = "bastion.pem"
+    private_ips  = aws_instance.private[*].private_ip
+    private_keys = [for i in range(var.private_instance_count) : "private-${i + 1}.pem"]
   })
+  filename = "${path.module}/ssh_config_per_connect.txt"
 }
