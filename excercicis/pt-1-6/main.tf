@@ -203,7 +203,7 @@ resource "aws_instance" "private" {
   ami = var.ami
   instance_type = var.instance_type
   subnet_id = aws_subnet.private_sub[count.index].id
-  security_groups = [ aws_security_group.private_sg.id ]
+  security_groups = [aws_security_group.private_sg.id]
   key_name = aws_key_pair.private_kp[count.index].key_name
   tags = {
     Name = "Private-${count.index}"
