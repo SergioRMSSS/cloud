@@ -30,6 +30,7 @@ resource "aws_subnet" "private_sub" {
   count      = var.private_instance_count
   vpc_id     = aws_vpc.main.id
   cidr_block = cidrsubnet("10.0.0.0/16", 8, count.index + 2)
+  availability_zone = "us-east-1b"
   tags = {
     Name = "subnet-private"
   }
@@ -213,7 +214,7 @@ resource "aws_instance" "private" {
 
 # Aqui empiezo la configuracionn del backet
 resource "aws_s3_bucket" "keys" {
-  bucket = "BucketPT-1-6"
+  bucket = "bucket-srms-pt-1-6"
 }
 
 resource "aws_s3_bucket_ownership_controls" "ownership" {
