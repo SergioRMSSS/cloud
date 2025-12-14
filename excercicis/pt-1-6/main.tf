@@ -41,7 +41,6 @@ resource "aws_nat_gateway" "natgw" {
 # Aqui creo las tablas de enrutamiento para que el trafico que no vaya a ninguna parte de la red salga a internet
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main.id
-
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
@@ -55,7 +54,6 @@ resource "aws_route_table_association" "public_assoc" {
 
 resource "aws_route_table" "private_rt" {
   vpc_id = aws_vpc.main.id
-
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.natgw.id
@@ -139,19 +137,19 @@ resource "tls_private_key" "private_key" {
 resource "aws_key_pair" "private_kp" {
   count = var.private_instance_count
   key_name = "private-key"
-  public_key = tls_private_key.private_key.public_key_openssh
+  public_key = tls_private_key.private_key[count.index].public_key_openssh
 }
 
 # Aqui creo los ficheros .pem
 resource "local_file" "bastion.pem" {
-  filename = "bastion.pem"
+  filename = "${path.module}/bastion.pem"
   content = tls_private_key.bastion_key.private_key_pem
   file_permission = "0400"
 }
 
 resource "local_file" "private.pem" {
   count = var.private_instance_count
-  filename = "private-${count.index + 1}.pem"
+  filename = "${path.module}/private-${count.index + 1}.pem"
   content = tls_private_key.private_key[count.index].private_key_pem
   file_permission = "0400"
 }
@@ -177,6 +175,39 @@ resource "aws_instance" "private" {
   instance_type = var.instance_type
   subnet_id = aws_subnet.private[count.index].id
   security_groups = [ aws_security_group.private_sg.id ]
-  key_name = aws_key_pair.private_kp.key_name
+  key_name = aws_key_pair.private_kp[count.index].key_name
 }
 
+# Aqui empiezo la configuracionn del backet
+resource "aws_s3_bucket" "keys" {
+  bucket = "BucketPT-1-6"
+}
+
+resource "aws_s3_bucket_ownership_controls" "ownership" {
+  bucket = aws_s3_bucket.keys.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_object" "bastion_pub" {
+  bucket = aws_s3_bucket.keys.id
+  key = "bastion.pub"
+  content = tls_private_key.bastion_key.public_key_openssh
+}
+
+resource "aws_s3_object" "private_pub" {
+  count = var.private_instance_count
+  bucket = aws_s3_bucket.keys.id
+  key = "private-$[count.index + 1].pub"
+  content = tls_private_key.private_key[count.index].public_key_openssh
+}
+
+# COnfiguracion del SSHCONFIG
+resource "local_file" "ssh_config" {
+  filename = "ssh_config_per_connectar.txt"
+  content = templatefile("${path.module}/ssh_config.tpl", {
+    bastion_ip = aws_eip.bastion_eip.public_ip
+    private_ips = aws_instance.private.*.private_ip
+  })
+}
