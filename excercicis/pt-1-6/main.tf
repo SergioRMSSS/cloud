@@ -2,6 +2,7 @@
 #Aqui creo el VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
+  enable_dns_hostnames = true
   tags = {
     Name = "vpc-main"
   }
@@ -153,7 +154,7 @@ resource "aws_key_pair" "bastion_kp" {
 }
 
 # Aqui creo las claves de las instancias privadas
-resource "tls_private_key" "private_key" {
+resource "tls_private_key" "private_keys" {
   count = var.private_instance_count
   algorithm = "RSA"
   rsa_bits = 4096
@@ -162,7 +163,7 @@ resource "tls_private_key" "private_key" {
 resource "aws_key_pair" "private_kp" {
   count = var.private_instance_count
   key_name = "private-key-${count.index}"
-  public_key = tls_private_key.private_key[count.index].public_key_openssh
+  public_key = tls_private_key.private_keys[count.index].public_key_openssh
 }
 
 # Aqui creo los ficheros .pem
@@ -175,7 +176,7 @@ resource "local_file" "bastion-pem" {
 resource "local_file" "private-pem" {
   count = var.private_instance_count
   filename = "${path.module}/private-${count.index + 1}.pem"
-  content = tls_private_key.private_key[count.index].private_key_pem
+  content = tls_private_key.private_keys[count.index].private_key_pem
   file_permission = "0400"
 }
 
@@ -208,7 +209,7 @@ resource "aws_instance" "private" {
   security_groups = [aws_security_group.private_sg.id]
   key_name = aws_key_pair.private_kp[count.index].key_name
   tags = {
-    Name = "Private-${count.index}"
+    Name = "Private${count.index}"
   }
 }
 
@@ -234,7 +235,7 @@ resource "aws_s3_object" "private_pub" {
   count = var.private_instance_count
   bucket = aws_s3_bucket.keys.id
   key = "private-${count.index + 1}.pub"
-  content = tls_private_key.private_key[count.index].public_key_openssh
+  content = tls_private_key.private_keys[count.index].public_key_openssh
 }
 
 # Configuracion del SSHCONFIG
