@@ -20,6 +20,7 @@ resource "aws_subnet" "public" {
   vpc_id = aws_vpc.main.id
   cidr_block = "10.0.1.0/24"
   map_public_ip_on_launch = true
+  availability_zone = "us-east-1a"
   tags = {
     Name = "subnet-public"
   }
@@ -159,7 +160,7 @@ resource "tls_private_key" "private_key" {
 
 resource "aws_key_pair" "private_kp" {
   count = var.private_instance_count
-  key_name = "private-key"
+  key_name = "private-key-${count.index}"
   public_key = tls_private_key.private_key[count.index].public_key_openssh
 }
 
@@ -231,7 +232,7 @@ resource "aws_s3_object" "bastion_pub" {
 resource "aws_s3_object" "private_pub" {
   count = var.private_instance_count
   bucket = aws_s3_bucket.keys.id
-  key = "private-$[count.index + 1].pub"
+  key = "private-${count.index + 1}.pub"
   content = tls_private_key.private_key[count.index].public_key_openssh
 }
 
